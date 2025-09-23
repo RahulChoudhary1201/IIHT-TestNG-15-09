@@ -27,6 +27,4 @@ public class DriverFactory {
             threadedDriver.remove();
         }
     }
-
-
 }

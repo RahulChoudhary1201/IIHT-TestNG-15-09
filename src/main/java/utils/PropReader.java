@@ -11,7 +11,7 @@ public class PropReader {
     public static String getProperty(String key) {
         Properties properties = new Properties();
         try {
-            FileInputStream fileInputStream = new FileInputStream("src/main/resources/config.properties");
+            FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir") + "/src/main/resources/config.properties");
             properties.load(fileInputStream);
             String value = properties.getProperty(key);
             if (StringUtils.isEmpty(value)) {

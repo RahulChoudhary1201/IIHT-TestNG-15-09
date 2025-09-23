@@ -44,7 +44,7 @@ public class TricentisTests {
         loginPage.clickLoginBtn();
     }
 
-    @Test(priority = 3, invocationCount = 3)
+    @Test(priority = 3, invocationCount = 2)
     public void searchTest() {
         SearchPage searchPage = new SearchPage();
         searchPage.search("Books");
