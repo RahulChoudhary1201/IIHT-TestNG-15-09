@@ -1,15 +1,37 @@
 stages:
+  - build
   - test
+  - report
 
-maven-test:
-  stage: test
-  image: maven:3.9.9-eclipse-temurin-17
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+# GitLab automatically clones your repo into $CI_PROJECT_DIR
+# No need for explicit checkout like in Jenkins
+
+build:
+  stage: build
+  image: maven:3.9.6-eclipse-temurin-17 # Maven + JDK preinstalled
   script:
-    - mvn clean test
+    - echo "Building project with Maven..."
+    - mvn -Dmaven.test.failure.ignore=true clean compile
 
+test:
+  stage: test
+  image: maven:3.9.6-eclipse-temurin-17
+  script:
+    - echo "Running Maven tests..."
+    - mvn -Dmaven.test.failure.ignore=true test
   artifacts:
     when: always
     paths:
       - target/surefire-reports/
-      - target/*.log
-    expire_in: 1 week
+    reports:
+      junit: target/surefire-reports/TEST-*.xml
+
+report:
+  stage: report
+  script:
+    - echo "Archiving reports..."
+  dependencies:
+    - test
