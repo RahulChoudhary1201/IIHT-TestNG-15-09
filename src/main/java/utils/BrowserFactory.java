@@ -4,27 +4,42 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 
 public class BrowserFactory {
 
 
-    public static WebDriver createBrowser() {
+    public static WebDriver createBrowser() throws MalformedURLException {
         String runEnv = PropReader.getProperty("runEnv");
+        System.out.println("Run Environment: "+runEnv);
         String browserName = PropReader.getProperty("browser");
         browserName = browserName.toLowerCase();
+        String osName = System.getProperty("os.name");
+        System.out.println("Os Name: "+osName);
         WebDriver driver;
 
-        if (runEnv.equals("ci")) {
-            switch (browserName) {
-                case "firefox" -> driver = new FirefoxDriver(new FirefoxOptions());
-                case "edge" -> driver = new EdgeDriver(new EdgeOptions());
-                default -> driver = new ChromeDriver(getChromeOptions());
+        if (runEnv.equalsIgnoreCase("remote")) {
+            String remoteUrl = PropReader.getProperty("remoteUrl");
+            ChromeOptions options = new ChromeOptions();
+            if (browserName.equalsIgnoreCase("chrome")) {
+                options.setCapability("browserName", browserName);
+            } else if (browserName.equalsIgnoreCase("firefox")) {
+                options.setCapability("browserName", browserName);
+            } else if (browserName.equalsIgnoreCase("edge")) {
+                options.setCapability("browserName", browserName);
             }
+            switch (osName) {
+                case "MAC OS X" -> options.setCapability("platformName", "MAC OS X");
+                case "Linux" -> options.setCapability("platformName", "Linux");
+                default -> options.setCapability("platformName", "Windows 10");
+            }
+            driver = new RemoteWebDriver(new URL(remoteUrl), options);
+
         } else {
             switch (browserName) {
                 case "firefox" -> driver = new FirefoxDriver();

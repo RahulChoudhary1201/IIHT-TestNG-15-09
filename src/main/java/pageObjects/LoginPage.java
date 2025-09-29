@@ -2,12 +2,9 @@ package pageObjects;
 
 import basepage.BasePage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginPage extends BasePage {
-
-    private WebDriver driver;
 
     private static final By LOGIN_XPATH = By.xpath("//a[@href='/login']");
     private static final By EMAIL_INPUT = By.id("Email");

@@ -14,13 +14,14 @@ import utils.ExcelReader;
 import utils.PropReader;
 
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 
 import static utils.DriverFactory.getDriver;
 
 public class TricentisTests {
 
     @BeforeMethod
-    public void setup() {
+    public void setup() throws MalformedURLException {
         WebDriver driver = BrowserFactory.createBrowser();
         DriverFactory.setDriver(driver);
         String url = PropReader.getProperty("appurl");
@@ -44,7 +45,7 @@ public class TricentisTests {
         loginPage.clickLoginBtn();
     }
 
-    @Test(priority = 3, invocationCount = 2)
+    @Test(priority = 3, invocationCount = 1)
     public void searchTest() {
         SearchPage searchPage = new SearchPage();
         searchPage.search("Books");
