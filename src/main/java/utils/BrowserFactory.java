@@ -14,17 +14,15 @@ import java.time.Duration;
 public class BrowserFactory {
 
 
-    public static WebDriver createBrowser() throws MalformedURLException {
+    public static WebDriver createBrowser(String browserName, boolean isHeadless, String remoteUrl) throws MalformedURLException {
         String runEnv = PropReader.getProperty("runEnv");
-        System.out.println("Run Environment: "+runEnv);
-        String browserName = PropReader.getProperty("browser");
+//        String browserName = PropReader.getProperty("browser");
         browserName = browserName.toLowerCase();
         String osName = System.getProperty("os.name");
-        System.out.println("Os Name: "+osName);
         WebDriver driver;
 
         if (runEnv.equalsIgnoreCase("remote")) {
-            String remoteUrl = PropReader.getProperty("remoteUrl");
+//            String remoteUrl = PropReader.getProperty("remoteUrl");
             ChromeOptions options = new ChromeOptions();
             if (browserName.equalsIgnoreCase("chrome")) {
                 options.setCapability("browserName", browserName);
@@ -44,7 +42,7 @@ public class BrowserFactory {
             switch (browserName) {
                 case "firefox" -> driver = new FirefoxDriver();
                 case "edge" -> driver = new EdgeDriver();
-                default -> driver = new ChromeDriver(getChromeOptions());
+                default -> driver = new ChromeDriver(getChromeOptions(isHeadless));
             }
         }
         driver.manage().window().maximize();
@@ -53,9 +51,11 @@ public class BrowserFactory {
     }
 
 
-    private static ChromeOptions getChromeOptions() {
+    private static ChromeOptions getChromeOptions(boolean isHeadless) {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=new");
+        if (isHeadless) {
+            options.addArguments("--headless=new");
+        }
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         return options;

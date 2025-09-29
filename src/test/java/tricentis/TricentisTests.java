@@ -1,10 +1,7 @@
 package tricentis;
 
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import pageObjects.LoginPage;
 import pageObjects.RegistrationPage;
 import pageObjects.SearchPage;
@@ -20,9 +17,15 @@ import static utils.DriverFactory.getDriver;
 
 public class TricentisTests {
 
-    @BeforeMethod
-    public void setup() throws MalformedURLException {
-        WebDriver driver = BrowserFactory.createBrowser();
+    @BeforeMethod(alwaysRun = true)
+    @Parameters({"browserName", "isHeadless", "remoteUrl"})
+    public void setup(@Optional("chrome") String browserName,
+                      @Optional("true") boolean isHeadless,
+                      @Optional("") String remoteUrl) throws MalformedURLException {
+        if (remoteUrl.isEmpty()){
+            remoteUrl = PropReader.getProperty("remoteUrl");
+        }
+        WebDriver driver = BrowserFactory.createBrowser(browserName, isHeadless, remoteUrl);
         DriverFactory.setDriver(driver);
         String url = PropReader.getProperty("appurl");
         getDriver().get(url);
