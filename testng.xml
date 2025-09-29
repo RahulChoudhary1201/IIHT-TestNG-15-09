@@ -2,12 +2,12 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
     <parameter name="browserName" value="chrome"/>
-    <parameter name="isHeadless" value="true"/>
+    <parameter name="isHeadless" value="false"/>
     <parameter name="remoteUrl" value="http://localhost:4444/wd/hub"/>
+    <parameter name="environment" value="prod"/>
     <test name="Tricentis Tests" parallel="methods" thread-count="3">
         <classes>
-            <class name="tricentis.TricentisTests">
-            </class>
+            <class name="tricentis.TricentisTests"/>
         </classes>
     </test>
 </suite>

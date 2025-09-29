@@ -17,12 +17,26 @@ import static utils.DriverFactory.getDriver;
 
 public class TricentisTests {
 
+    private void initDriver() {
+        String browser = System.getProperty("browserName", "Chrome");
+        String remoteUrl = System.getProperty("remoteUrl");
+        String isHeadless = System.getProperty("isHeadless", "false");
+        String environment = System.getProperty("environment", "QA");
+
+        System.out.println("Running on browser: " + browser);
+        System.out.println("Running on remote URL: " + remoteUrl);
+        System.out.println("Running in headless: " + isHeadless);
+        System.out.println("Running on Env: " + environment);
+
+    }
+
     @BeforeMethod(alwaysRun = true)
     @Parameters({"browserName", "isHeadless", "remoteUrl"})
     public void setup(@Optional("chrome") String browserName,
-                      @Optional("true") boolean isHeadless,
+                      @Optional("false") boolean isHeadless,
                       @Optional("") String remoteUrl) throws MalformedURLException {
-        if (remoteUrl.isEmpty()){
+        initDriver();
+        if (remoteUrl.isEmpty()) {
             remoteUrl = PropReader.getProperty("remoteUrl");
         }
         WebDriver driver = BrowserFactory.createBrowser(browserName, isHeadless, remoteUrl);
